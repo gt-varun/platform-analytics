@@ -28,18 +28,6 @@ An executive-grade business analytics dashboard for SaaS platforms, providing re
 
 ---
 
-## Screenshots
-
-### Dashboard
-
-(Add screenshot)
-
-### Executive PDF
-
-(Add screenshot)
-
----
-
 ## Tech Stack
 
 - **Frontend**: [React 18](https://react.dev/), [TypeScript](https://www.typescriptlang.org/)
