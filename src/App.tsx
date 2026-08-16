@@ -299,7 +299,7 @@ export function App() {
         <Card>
           <EmptyState
             title="Not available in this layer"
-            description="The active role does not have permission for this view (§2). Pick another section above."
+            description="The active role does not have permission for this view. Pick another section above."
           />
         </Card>
       );

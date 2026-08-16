@@ -71,7 +71,7 @@ function scopeSheet(input: WorkbookInput, included: string[], withheld: string[]
     ['Provenance', userLayer.provenance],
     ['', ''],
     ['Sheets included', included.join(', ')],
-    ['Withheld by role (§2)', withheld.length > 0 ? withheld.join(', ') : 'Nothing — this role sees every sheet'],
+    ['Withheld by role', withheld.length > 0 ? withheld.join(', ') : 'Nothing — this role sees every sheet'],
     // A sheet that is permitted but has no rows is dropped rather than shipped
     // empty. Saying so matters: an absent sheet otherwise reads as a permission
     // boundary, which is a very different claim from "there was no data".
@@ -119,7 +119,7 @@ function summarySheet(input: WorkbookInput): Sheet {
 
   if (can(role, 'view:overage')) {
     rows.push(
-      ['Live overage this cycle (USD)', rollup.totalOverageUsd, 'Accruing, not yet invoiced (§4.2)'],
+      ['Live overage this cycle (USD)', rollup.totalOverageUsd, 'Accruing, not yet invoiced'],
       ['Accounts accruing overage', rollup.usersWithOverage, `of ${rollup.userCount} in scope`]
     );
   }
@@ -127,7 +127,7 @@ function summarySheet(input: WorkbookInput): Sheet {
   if (can(role, 'view:invoices')) {
     const ar = summary.accounts_receivable;
     rows.push(
-      ['Unpaid renewals & overages (USD)', ar.total_outstanding_usd, 'Invoiced and unpaid only (§4.2)'],
+      ['Unpaid renewals & overages (USD)', ar.total_outstanding_usd, 'Invoiced and unpaid only'],
       ['Open invoices', ar.open_invoice_count, ''],
       ['Overdue (USD)', ar.overdue_usd, ''],
       ['Overdue invoices', ar.overdue_invoice_count, '']
@@ -194,7 +194,7 @@ function modulesSheet(input: WorkbookInput): Sheet {
         line?.totalOverageUsd ?? 0,
         def.overageRateUsd,
         `per ${def.rateUnit}`,
-        line?.unreliable ? 'NO — under-reports (§5.1)' : 'yes',
+        line?.unreliable ? 'NO — under-reports' : 'yes',
       ];
     }),
   };

@@ -364,7 +364,7 @@ export function buildPreviewUserLayer(summary: UsageSummaryResponse): UserUsageR
       `exactly the number of active users the API reports, so every column still sums to the real figure. ` +
       `Tier counts, the exempt/paying split and receivables come straight from the API. ` +
       (enterpriseAdded
-        ? `The Enterprise contract (Google) has no Stripe subscription record, so it is added as ${PREVIEW_ENTERPRISE_ACCOUNTS} account to keep the tier first-class (§3). `
+        ? `The Enterprise contract (Google) has no Stripe subscription record, so it is added as ${PREVIEW_ENTERPRISE_ACCOUNTS} account to keep the tier first-class. `
         : '') +
       `Which account did what — and the churn/renewal reasons — are illustrative until /admin/user-usage ships.`,
   };
