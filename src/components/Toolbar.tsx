@@ -238,14 +238,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   <header className="sticky top-0 z-20 bg-canvas/90 backdrop-blur-sm border-b border-line">
     <div className="max-w-[1440px] mx-auto px-5 sm:px-8 py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
       <div className="min-w-0">
-        <div className="flex items-baseline gap-2.5 flex-wrap">
-          <h1 className="text-[20px] font-semibold text-ink leading-tight">{view?.label ?? 'Analytics'}</h1>
-          {view?.requirement && (
-            <span className="num text-[11px] text-subtle border border-line rounded px-1.5 py-px">
-              {view.requirement}
-            </span>
-          )}
-        </div>
+        <h1 className="text-[20px] font-semibold text-ink leading-tight">{view?.label ?? 'Analytics'}</h1>
         {view?.description && <p className="text-[13px] text-muted mt-0.5">{view.description}</p>}
       </div>
 

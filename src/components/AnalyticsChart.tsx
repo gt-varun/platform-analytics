@@ -87,9 +87,9 @@ export const AnalyticsChart: React.FC<ChartProps> = (props) => {
   if (props.type === 'usage-trend') {
     const seriesConfig = [
       { key: 'meeting_time', name: 'Meeting Time', color: '#3454d1' }, // Indigo
-      { key: 'kyc_count', name: 'KYC Checks', color: '#178a5b' },     // Emerald
-      { key: 'simulator', name: 'Simulator', color: '#b25e09' },      // Amber
-      { key: 'proposal', name: 'Proposal', color: '#a93b7b' },        // Pink
+  { key: 'kyc_count', name: 'KYC Checks', color: '#178a5b' }, // Emerald
+  { key: 'simulator', name: 'Simulator', color: '#b25e09' }, // Amber
+  { key: 'proposal', name: 'Proposal', color: '#a93b7b' }, // Pink
     ];
 
     return (

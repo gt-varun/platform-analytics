@@ -294,7 +294,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </nav>
 
-      {/* Layer switcher — §2 */}
+      {/* Layer switcher — */}
       <div className={`border-t border-line ${collapsed ? 'p-2.5' : 'p-3'}`}>
         {collapsed ? (
           <>

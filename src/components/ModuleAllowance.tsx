@@ -29,7 +29,7 @@ export const ModuleAllowanceRow: React.FC<{ line: ModuleBillingLine; showTimeEqu
           <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
           <span className="text-sm font-semibold text-ink truncate">{def.label}</span>
           {line.unreliable && (
-            <Badge tone="warning" icon={<AlertTriangle className="w-3 h-3" />} title="KYC overage tracking is blocked by a backend dependency (§5.1)">
+            <Badge tone="warning" icon={<AlertTriangle className="w-3 h-3" />} title="KYC overage tracking is blocked by a backend dependency">
               unverified
             </Badge>
           )}

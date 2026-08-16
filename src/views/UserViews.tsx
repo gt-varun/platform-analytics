@@ -114,7 +114,7 @@ export const UserUsagePanels: React.FC<{
         </Card>
       )}
 
-      {/* Live cycle position (§4.1) */}
+      {/* Live cycle position */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <StatTile
           label="Overage this cycle"
@@ -140,7 +140,7 @@ export const UserUsagePanels: React.FC<{
           tone={billing.overTenureCap ? 'warning' : 'neutral'}
           footnote={
             TIERS[user.tier].tenureCapMonths
-              ? `Proposed cap: ${TIERS[user.tier].tenureCapMonths} months (§3 — tracked, not enforced)`
+              ? `Proposed cap: ${TIERS[user.tier].tenureCapMonths} months (tracked, not enforced)`
               : undefined
           }
         />
@@ -153,7 +153,7 @@ export const UserUsagePanels: React.FC<{
         />
       </div>
 
-      {/* Plan fit (§4.3) */}
+      {/* Plan fit */}
       <Callout
         tone={
           recommendation.action === 'stay'
@@ -184,21 +184,19 @@ export const UserUsagePanels: React.FC<{
         )}
       </Callout>
 
-      {/* Allowance consumption per module (§4.1, §4.6) */}
+      {/* Allowance consumption per module */}
       <Card>
         <SectionHeading
           title="Usage against plan allowance"
-          requirement="§4.1"
           subtitle="Current billing cycle. Meeting time reads in days, hours and minutes; every module also prices its overage."
         />
         <ModuleAllowanceList lines={lines} />
       </Card>
 
-      {/* Trend with granularity toggle (§4.1 "not just daily") */}
+      {/* Trend with granularity toggle */}
       <Card>
         <SectionHeading
           title="Usage trend"
-          requirement="§4.1"
           subtitle="Dashed line marks the allowance for the selected bucket — where it is crossed, overage starts."
           actions={<GranularityToggle value={ctx.granularity} onChange={ctx.onGranularityChange} />}
         />
@@ -262,7 +260,7 @@ export const MyUsageView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <UserUsagePanels billing={currentUser} ctx={ctx} />
 
       <Callout tone="neutral" icon={<Lock className="w-4 h-4 text-muted" />}>
-        This layer shows your data only. No other account&apos;s usage is loaded into this view — §2 makes that the
+        This layer shows your data only. No other account&apos;s usage is loaded into this view — the access model makes that the
         hard boundary the other three layers are built on top of.
       </Callout>
     </div>
@@ -340,7 +338,6 @@ export const UsersView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <Card>
         <SectionHeading
           title="Per-user usage"
-          requirement="§4.1"
           subtitle="The lowest-level view every other layer aggregates from. Select a row for the full drill-down."
           icon={<UsersIcon className="w-5 h-5 text-accent" />}
           actions={
@@ -456,7 +453,7 @@ export const UsersView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
         <Pagination state={pager} noun={rows.length === ctx.billings.length ? 'accounts' : `of ${ctx.billings.length} accounts`} />
 
         <p className="text-[11px] text-muted mt-2">
-          Usage columns are current-billing-cycle totals; meeting time reads in days, hours and minutes (§5.2).
+          Usage columns are current-billing-cycle totals; meeting time reads in days, hours and minutes.
         </p>
       </Card>
 
@@ -493,7 +490,7 @@ const UserDetailDrawer: React.FC<{ billing: UserBilling; ctx: ViewContext }> = (
     <div className="relative w-full max-w-3xl h-full overflow-y-auto bg-canvas border-l border-line p-5 sm:p-6 shadow-[-12px_0_40px_rgba(0,0,0,0.28)] animate-drawer">
       <div className="flex items-start justify-between gap-4 mb-5">
         <div>
-          <p className="text-[11px] uppercase tracking-wider text-muted font-bold">Drill-down · §2 Management</p>
+          <p className="text-[11px] uppercase tracking-wider text-muted font-bold">Drill-down</p>
           <h2 className="text-xl font-bold text-ink">{billing.user.display_name}</h2>
           <p className="text-xs text-muted">
             {billing.user.email} · joined {formatDate(billing.user.subscription_started_at)} ·{' '}
@@ -582,7 +579,7 @@ export const RollupView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       {!showsIndividuals && (
         <Callout tone="info" icon={<Lock className="w-4 h-4 text-accent" />} title="Aggregated view by design">
           The Admin layer sees summarised usage across every user in scope — never another individual&apos;s raw
-          detail (§2). Counts and totals below are computed from the per-user layer, then stripped of identity.
+          detail. Counts and totals below are computed from the per-user layer, then stripped of identity.
         </Callout>
       )}
 
@@ -603,7 +600,7 @@ export const RollupView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
         <StatTile
           label="Past Starter tenure cap"
           value={String(rollup.starterPastCap)}
-          hint="Starters older than the proposed 3-month cap (§3)"
+          hint="Starters older than the proposed 3-month cap"
           tone={rollup.starterPastCap > 0 ? 'warning' : 'neutral'}
         />
       </div>
@@ -611,7 +608,6 @@ export const RollupView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <Card>
         <SectionHeading
           title="Module rollup"
-          requirement="§2 · §4.6"
           subtitle="Aggregated consumption against the sum of every account's included allowance."
           icon={<Layers className="w-5 h-5 text-accent" />}
         />
@@ -674,7 +670,6 @@ export const RollupView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <Card>
         <SectionHeading
           title="Org usage trend"
-          requirement="§4.1"
           subtitle="Live aggregate series from /admin/usage-summary. The dashed line is the org-wide allowance for each bucket."
           actions={<GranularityToggle value={ctx.granularity} onChange={ctx.onGranularityChange} />}
         />
@@ -684,7 +679,6 @@ export const RollupView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <Card>
         <SectionHeading
           title="Tenure distribution"
-          requirement="§3"
           subtitle="How long accounts have held their current tier — the evidence base for the proposed 3-month Starter cap."
         />
         <HorizontalBars data={tenureData} valueFormatter={(v) => `${Math.round(v)}`} height={210} />
@@ -695,7 +689,7 @@ export const RollupView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       </Card>
 
       <Card>
-        <SectionHeading title="Tier mix" requirement="§4.3" subtitle="Accounts by plan tier in this scope." />
+        <SectionHeading title="Tier mix" subtitle="Accounts by plan tier in this scope." />
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {TIER_ORDER.map((tier) => {
             const count = ctx.rollup.tierCounts[tier];

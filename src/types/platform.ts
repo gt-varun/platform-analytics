@@ -132,7 +132,6 @@ export interface KnownIssue {
   severity: 'blocker' | 'high' | 'medium';
   owner: string;
   status: 'open' | 'in_dashboard' | 'fixed';
-  section: string;
 }
 
 export interface OpenQuestion {

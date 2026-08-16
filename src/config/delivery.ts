@@ -24,7 +24,6 @@ export const KNOWN_ISSUES: KnownIssue[] = [
     severity: 'blocker',
     owner: 'Avi / backend — confirm via Sai',
     status: 'open',
-    section: '§5.1',
   },
   {
     id: 'avg-duration',
@@ -35,7 +34,6 @@ export const KNOWN_ISSUES: KnownIssue[] = [
     severity: 'medium',
     owner: 'Dashboard',
     status: 'in_dashboard',
-    section: '§5.2',
   },
   {
     id: 'provider-label',
@@ -46,7 +44,6 @@ export const KNOWN_ISSUES: KnownIssue[] = [
     severity: 'medium',
     owner: 'Dashboard',
     status: 'in_dashboard',
-    section: '§4.4 / §5.3',
   },
   {
     id: 'receivables-label',
@@ -57,7 +54,6 @@ export const KNOWN_ISSUES: KnownIssue[] = [
     severity: 'high',
     owner: 'Dashboard',
     status: 'in_dashboard',
-    section: '§4.2',
   },
   {
     id: 'trend-total-mismatch',
@@ -71,19 +67,17 @@ export const KNOWN_ISSUES: KnownIssue[] = [
     severity: 'medium',
     owner: 'Sai / backend',
     status: 'open',
-    section: 'Found during build',
   },
   {
     id: 'per-user-endpoint',
     title: 'No per-user usage endpoint exists yet',
     detail:
-      'The live backend exposes aggregates only (/admin/usage-summary). The per-user layer §4.1 calls for cannot be ' +
+      'The live backend exposes aggregates only (/admin/usage-summary). The per-user layer this dashboard needs cannot be ' +
       'sourced from it, so those views run on a preview dataset derived from the real aggregates until the endpoints ' +
       'in the Data Contract tab ship.',
     severity: 'blocker',
     owner: 'Sai / Diptanshu',
     status: 'open',
-    section: '§6',
   },
 ];
 
@@ -114,7 +108,7 @@ export const OPEN_QUESTIONS: OpenQuestion[] = [
     id: 'pro-bundle',
     question: 'What is actually included in the $55 Pro tier?',
     context:
-      '§3 fixes the price but not the bundle. Modelled at ~$50 of included value so recommendations can be computed ' +
+      'The pricing model fixes the price but not the bundle. Modelled at ~$50 of included value so recommendations can be computed ' +
       '— every Pro allowance number depends on this answer.',
     owner: 'Leadership',
   },
@@ -142,7 +136,6 @@ export interface EndpointContract {
   status: 'live' | 'required';
   purpose: string;
   owner: string;
-  requirement: string;
   shape: string;
 }
 
@@ -157,7 +150,6 @@ export const ENDPOINT_CONTRACTS: EndpointContract[] = [
     status: 'live',
     purpose: 'Aggregate usage, revenue, tier/channel splits, receivables, growth, churn.',
     owner: 'Shipped',
-    requirement: '§4.3–§4.6',
     shape: 'UsageSummaryResponse',
   },
   {
@@ -168,7 +160,6 @@ export const ENDPOINT_CONTRACTS: EndpointContract[] = [
       'Per-user usage in source units (meeting seconds, KYC/simulation/proposal counts), current billing cycle ' +
       'window, tier + tier_started_at, billing provider, exemption flag, per-day series.',
     owner: 'Sai / Diptanshu',
-    requirement: '§4.1 — the foundation layer',
     shape: 'UserUsageResponse (see src/types/platform.ts)',
   },
   {
@@ -177,7 +168,6 @@ export const ENDPOINT_CONTRACTS: EndpointContract[] = [
     status: 'required',
     purpose: 'Same shape as one row of /admin/user-usage, scoped to the caller. Powers the User layer without exposing anyone else.',
     owner: 'Sai',
-    requirement: '§2 User layer',
     shape: 'UserUsageRecord',
   },
   {
@@ -188,7 +178,6 @@ export const ENDPOINT_CONTRACTS: EndpointContract[] = [
       'Overage accrued this billing cycle per user per module, computed server-side from the same rate card. Needed ' +
       'so overage is not a client-side estimate at invoice time.',
     owner: 'Sai',
-    requirement: '§4.2',
     shape: '{ user_id, module, units, usd, as_of }[]',
   },
   {
@@ -197,7 +186,6 @@ export const ENDPOINT_CONTRACTS: EndpointContract[] = [
     status: 'required',
     purpose: 'Unpaid renewals and unpaid overages split by reason, with the billing channel attached.',
     owner: 'Sai',
-    requirement: '§4.2 / §4.4',
     shape: '{ invoice_id, user_id, reason: "renewal"|"overage", amount_usd, channel, due_date }[]',
   },
   {
@@ -208,7 +196,6 @@ export const ENDPOINT_CONTRACTS: EndpointContract[] = [
       'Tier changes, cancellations and renewals with reason codes. Removes the "no history table" caveat from churn ' +
       'and is the only way to answer "why are people dropping out / renewing".',
     owner: 'Diptanshu',
-    requirement: '§2 Management layer',
     shape: '{ user_id, event, from_tier, to_tier, reason, occurred_at }[]',
   },
 ];

@@ -22,7 +22,6 @@ export interface ViewDefinition {
   id: ViewId;
   label: string;
   description: string;
-  requirement?: string;
   group: 'Usage' | 'Money' | 'Programme';
   requiresAll?: Permission[];
   requiresAny?: Permission[];
@@ -42,7 +41,6 @@ export const VIEWS: ViewDefinition[] = [
     id: 'my-usage',
     label: 'My Usage',
     description: 'Your own consumption, overages and plan fit',
-    requirement: '§4.1',
     group: 'Usage',
     requiresAll: ['view:own_usage'],
   },
@@ -50,7 +48,6 @@ export const VIEWS: ViewDefinition[] = [
     id: 'users',
     label: 'Per-User Usage',
     description: 'Every user’s consumption, drill-down capable',
-    requirement: '§4.1',
     group: 'Usage',
     requiresAll: ['view:user_detail'],
   },
@@ -58,7 +55,6 @@ export const VIEWS: ViewDefinition[] = [
     id: 'rollup',
     label: 'Org Rollup',
     description: 'Aggregated usage across all users — no individual detail',
-    requirement: '§2',
     group: 'Usage',
     requiresAll: ['view:org_rollup'],
   },
@@ -66,7 +62,6 @@ export const VIEWS: ViewDefinition[] = [
     id: 'modules',
     label: 'Module Usage',
     description: 'KYC, Simulator, Proposal Hub and meeting minutes vs allowance',
-    requirement: '§4.6',
     group: 'Usage',
     requiresAll: ['view:usage_behavior'],
   },
@@ -74,7 +69,6 @@ export const VIEWS: ViewDefinition[] = [
     id: 'overage',
     label: 'Overage Tracking',
     description: 'Live accrual per user per module this billing cycle',
-    requirement: '§4.2',
     group: 'Money',
     requiresAll: ['view:overage'],
     requiresAny: ['view:org_rollup', 'view:invoices'],
@@ -83,7 +77,6 @@ export const VIEWS: ViewDefinition[] = [
     id: 'plans',
     label: 'Plans & Tiers',
     description: 'Tier mix, tenure on tier and upgrade recommendations',
-    requirement: '§4.3',
     group: 'Money',
     requiresAll: ['view:plan_recommendations'],
     requiresAny: ['view:org_rollup', 'view:invoices'],
@@ -92,7 +85,6 @@ export const VIEWS: ViewDefinition[] = [
     id: 'billing',
     label: 'Billing Management',
     description: 'Billing channels, invoices, unpaid renewals and growth',
-    requirement: '§4.4',
     group: 'Money',
     requiresAny: ['view:invoices', 'view:billing_channels'],
   },
@@ -100,14 +92,12 @@ export const VIEWS: ViewDefinition[] = [
     id: 'access',
     label: 'Access Model',
     description: 'The four layers and the RBAC permission matrix',
-    requirement: '§2',
     group: 'Programme',
   },
   {
     id: 'delivery',
     label: 'Delivery & Gaps',
     description: 'Known issues, endpoint contracts, open questions, action items',
-    requirement: '§5–§9',
     group: 'Programme',
   },
 ];

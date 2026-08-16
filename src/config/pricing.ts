@@ -44,7 +44,7 @@ export const MODULES: Record<ModuleKey, ModuleDefinition> = {
     sourceUnit: 'seconds',
     rateUnit: 'hour',
     sourceUnitsPerRateUnit: 3600,
-    overageRateUsd: 1, // 9 hours ≈ $9 (§3) → $1/hour
+    overageRateUsd: 1, // 9 hours ≈ $9 → $1/hour
     minutesPerUnit: null,
     color: '#3454d1',
     colorDark: '#84a9ff',
@@ -61,7 +61,7 @@ export const MODULES: Record<ModuleKey, ModuleDefinition> = {
     minutesPerUnit: 10,
     color: '#178a5b',
     colorDark: '#31a883',
-    helpText: 'Identity / diligence checks. ~10 min of analyst time each (§3, rough).',
+    helpText: 'Identity / diligence checks. ~10 min of analyst time each (rough estimate).',
   },
   simulator: {
     key: 'simulator',
@@ -74,7 +74,7 @@ export const MODULES: Record<ModuleKey, ModuleDefinition> = {
     minutesPerUnit: 30,
     color: '#b25e09',
     colorDark: '#f7c77e',
-    helpText: 'Simulator sessions. ~30 min/session (§3, rough).',
+    helpText: 'Simulator sessions. ~30 min/session (rough estimate).',
   },
   proposal: {
     key: 'proposal',
@@ -83,11 +83,11 @@ export const MODULES: Record<ModuleKey, ModuleDefinition> = {
     sourceUnit: 'count',
     rateUnit: 'unit',
     sourceUnitsPerRateUnit: 1,
-    overageRateUsd: 0.12, // recently adjusted from ~$1 (§3)
+    overageRateUsd: 0.12, // recently adjusted from ~$1
     minutesPerUnit: 10,
     color: '#a93b7b',
     colorDark: '#e58ab8',
-    helpText: 'Proposal Hub generations. Repriced to ~$0.12/proposal (§3).',
+    helpText: 'Proposal Hub generations. Repriced to ~$0.12/proposal.',
   },
 };
 
@@ -133,7 +133,7 @@ export const TIERS: Record<TierId, TierDefinition> = {
     upgradeTo: 'pro',
     color: '#3454d1',
     colorDark: '#84a9ff',
-    note: '$18 of included value at $20 (§3). 3-month cap proposed but NOT enforced.',
+    note: '$18 of included value at $20. 3-month cap proposed but NOT enforced.',
   },
   pro: {
     id: 'pro',
@@ -145,7 +145,7 @@ export const TIERS: Record<TierId, TierDefinition> = {
     upgradeTo: 'enterprise',
     color: '#178a5b',
     colorDark: '#31a883',
-    note: 'DERIVED: $58 included value, back-solved from the "$60 overage → $55 plan saves $5" example in §1. Awaiting confirmation (§8).',
+    note: 'DERIVED: $58 included value, back-solved from the "$60 overage → $55 plan saves $5" worked example. Awaiting confirmation.',
   },
   enterprise: {
     id: 'enterprise',
@@ -158,7 +158,7 @@ export const TIERS: Record<TierId, TierDefinition> = {
     color: '#6d45b8',
     colorDark: '#b39af0',
     note: 'Negotiated contract (already sold to Google). Allowances are per-contract; ' +
-      'per-module Enterprise breakdown is deferred to v2 (§4.3).',
+      'per-module Enterprise breakdown is deferred to v2.',
   },
 };
 
@@ -209,15 +209,15 @@ export interface PricingAssumption {
 }
 
 export const PRICING_ASSUMPTIONS: PricingAssumption[] = [
-  { id: 'credit', label: 'Credit unit', value: '1 credit = $1', status: 'proposed', source: '§3 baseline, subject to change' },
-  { id: 'starter', label: 'Starter bundle', value: '$20 → 9h meetings + $3 × KYC / Simulator / Proposal = $18 value', status: 'confirmed', source: '§3' },
-  { id: 'pro', label: 'Pro bundle', value: '$55 → $58 of included value (29h + $10 + $10 + $9)', status: 'proposed', source: 'DERIVED from the "$60 overage saves $5 on Pro" example in §1 — not stated in §3' },
-  { id: 'enterprise', label: 'Enterprise', value: 'Negotiated; per-module breakdown deferred to v2', status: 'proposed', source: '§4.3' },
-  { id: 'rate-kyc', label: 'KYC overage', value: '$1.00 per check', status: 'estimate', source: '§3 — pending pricing worksheet' },
-  { id: 'rate-sim', label: 'Simulation overage', value: '$1.00 per session', status: 'estimate', source: '§3 — pending pricing worksheet' },
-  { id: 'rate-proposal', label: 'Proposal overage', value: '$0.12 per proposal', status: 'estimate', source: '§3 — recently adjusted' },
-  { id: 'rate-meeting', label: 'Meeting overage', value: '$1.00 per hour', status: 'estimate', source: 'Derived from 9h ≈ $9 (§3)' },
-  { id: 'time-sim', label: 'Time per simulation', value: '~30 min', status: 'estimate', source: '§3 rough' },
-  { id: 'time-kyc', label: 'Time per KYC / proposal', value: '~10 min each', status: 'estimate', source: '§3 rough' },
-  { id: 'tenure', label: 'Starter tenure cap', value: '3 months, then migrate to Pro', status: 'proposed', source: '§3 — tracked, NOT enforced' },
+  { id: 'credit', label: 'Credit unit', value: '1 credit = $1', status: 'proposed', source: 'Baseline, subject to change' },
+  { id: 'starter', label: 'Starter bundle', value: '$20 → 9h meetings + $3 × KYC / Simulator / Proposal = $18 value', status: 'confirmed', source: 'Pricing model' },
+  { id: 'pro', label: 'Pro bundle', value: '$55 → $58 of included value (29h + $10 + $10 + $9)', status: 'proposed', source: 'DERIVED from the "$60 overage saves $5 on Pro" worked example — not stated directly' },
+  { id: 'enterprise', label: 'Enterprise', value: 'Negotiated; per-module breakdown deferred to v2', status: 'proposed', source: 'Deferred to v2' },
+  { id: 'rate-kyc', label: 'KYC overage', value: '$1.00 per check', status: 'estimate', source: 'Estimate — pending pricing worksheet' },
+  { id: 'rate-sim', label: 'Simulation overage', value: '$1.00 per session', status: 'estimate', source: 'Estimate — pending pricing worksheet' },
+  { id: 'rate-proposal', label: 'Proposal overage', value: '$0.12 per proposal', status: 'estimate', source: 'Recently adjusted' },
+  { id: 'rate-meeting', label: 'Meeting overage', value: '$1.00 per hour', status: 'estimate', source: 'Derived from 9h ≈ $9' },
+  { id: 'time-sim', label: 'Time per simulation', value: '~30 min', status: 'estimate', source: 'Rough estimate' },
+  { id: 'time-kyc', label: 'Time per KYC / proposal', value: '~10 min each', status: 'estimate', source: 'Rough estimate' },
+  { id: 'tenure', label: 'Starter tenure cap', value: '3 months, then migrate to Pro', status: 'proposed', source: 'Proposed — tracked, NOT enforced' },
 ];

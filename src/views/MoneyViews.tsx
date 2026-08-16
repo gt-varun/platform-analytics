@@ -89,7 +89,7 @@ export const OverageView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
           label: MODULES[m.module].label,
           value: m.totalOverageUsd,
           color: palette.module(m.module),
-          note: m.unreliable ? 'under-reports — KYC bug §5.1' : undefined,
+          note: m.unreliable ? 'under-reports — KYC tracking bug' : undefined,
         }))
         .sort((a, b) => b.value - a.value),
     [ctx.rollup.modules, palette]
@@ -102,7 +102,7 @@ export const OverageView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
     <div className="space-y-5 stagger">
       <ProvenanceBanner layer={ctx.userLayer} />
 
-      {/* The §4.2 distinction, stated before any number is shown. */}
+      {/* The distinction, stated before any number is shown. */}
       <Callout tone="info" icon={<Info className="w-4 h-4 text-accent" />} title="Two different things, never mixed">
         <ul className="space-y-1 list-disc pl-4">
           <li>
@@ -136,7 +136,7 @@ export const OverageView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
           hint={`${ar.open_invoice_count} open invoice${ar.open_invoice_count === 1 ? '' : 's'} · ${formatCurrency(ar.overdue_usd)} overdue`}
           tone={ar.overdue_invoice_count > 0 ? 'danger' : 'neutral'}
           icon={<Receipt className="w-4 h-4" />}
-          footnote="Invoiced and unpaid only — was “Outstanding Receivables” (§4.2)"
+          footnote="Invoiced and unpaid only — was “Outstanding Receivables”"
         />
         <StatTile
           label="Would invoice today"
@@ -150,7 +150,7 @@ export const OverageView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
         <Callout
           tone="danger"
           icon={<AlertOctagon className="w-4 h-4 text-critical" />}
-          title="KYC overage tracking is broken (§5.1)"
+          title="KYC overage tracking is broken"
         >
           KYC overage is blocked by a backend dependency tied to KYC initiation — initiated-but-uncompleted checks are
           not counted, so every KYC figure below <span className="font-semibold text-ink">under-reports</span>. Owner:
@@ -162,7 +162,6 @@ export const OverageView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
         <Card>
           <SectionHeading
             title="Overage by module"
-            requirement="§4.2"
             subtitle="Live accrual this cycle, priced with the current rate card."
           />
           {overageByModule.every((row) => row.value === 0) ? (
@@ -217,7 +216,6 @@ export const OverageView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
         <Card>
           <SectionHeading
             title="Overage trigger"
-            requirement="§4.6"
             subtitle="Where consumption crosses the org-wide allowance, the bar turns red — that segment is what bills."
             actions={
               <>
@@ -262,11 +260,10 @@ export const OverageView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <Card>
         <SectionHeading
           title="Accounts accruing overage now"
-          requirement="§4.2"
           subtitle={
             showIdentity
               ? 'Ranked by live accrual this cycle. Per user, per module.'
-              : 'Ranked by live accrual. Identity is withheld in this layer (§2) — rollups only.'
+              : 'Ranked by live accrual. Identity is withheld in this layer — rollups only.'
           }
           icon={<Banknote className="w-5 h-5 text-caution" />}
         />
@@ -418,16 +415,15 @@ export const PlansView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
         })}
       </div>
 
-      <Callout tone="violet" icon={<Info className="w-4 h-4 text-accent" />} title="Enterprise is a first-class tier here (§3)">
+      <Callout tone="violet" icon={<Info className="w-4 h-4 text-accent" />} title="Enterprise is a first-class tier here">
         Enterprise is already sold to Google but has no Stripe subscription row, so it never appeared in the old
         tier breakdown. It is rendered above as its own tier with a negotiated allowance. The per-module Enterprise
-        breakdown is explicitly deferred to v2 (§4.3).
+        breakdown is explicitly deferred to v2.
       </Callout>
 
       <Card>
         <SectionHeading
           title="Plan-change candidates"
-          requirement="§4.3"
           subtitle="Accounts whose overage exceeds the delta to the next tier — the proactive “the $55 plan saves you $5” list."
           icon={<ArrowUpRight className="w-5 h-5 text-caution" />}
         />
@@ -493,7 +489,6 @@ export const PlansView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <Card>
         <SectionHeading
           title="Does upgrading actually pay?"
-          requirement="§8"
           subtitle="Break-even test for Starter → Pro: how much allowance Pro must include before an upgrade saves money, per module."
           icon={<Info className="w-5 h-5 text-accent" />}
         />
@@ -547,7 +542,7 @@ export const PlansView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
               step from Starter to Pro is{' '}
               {formatCurrency((TIERS.pro.priceUsd ?? 0) - (TIERS.starter.priceUsd ?? 0))}. Where a module&apos;s row says
               &quot;never&quot;, an account whose overage sits in that module is <em>always</em> cheaper staying on
-              Starter no matter how far over it goes — so the &quot;move them up a tier&quot; motion in §1 quietly
+              Starter no matter how far over it goes — so the &quot;move them up a tier&quot; motion quietly
               cannot work for them. Raising that module&apos;s Pro allowance, or its overage rate, is what makes the
               recommendation engine able to fire.
             </Callout>
@@ -560,7 +555,6 @@ export const PlansView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <Card>
         <SectionHeading
           title="Tenure on tier & the proposed 3-month Starter cap"
-          requirement="§3 · §8"
           subtitle="Tracked now so the policy can be decided with real data — nothing is enforced by the dashboard."
           icon={<CalendarClock className="w-5 h-5 text-accent" />}
         />
@@ -680,7 +674,7 @@ export const BillingView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       meta: CHANNEL_LABELS[key] ?? {
         label: key.replace(/_/g, ' '),
         colorKey: 'other' as const,
-        definition: 'Undocumented billing channel — needs a definition before it ships (§4.4).',
+        definition: 'Undocumented billing channel — needs a definition before it ships.',
       },
     }));
   }, [ctx.summary.billing_provider_breakdown, ctx.summary.paying_billing_provider_breakdown]);
@@ -710,7 +704,7 @@ export const BillingView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
           value={formatCurrency(ar.total_outstanding_usd)}
           hint={`${ar.open_invoice_count} open · ${formatCurrency(ar.overdue_usd)} overdue`}
           tone={ar.overdue_invoice_count > 0 ? 'danger' : 'neutral'}
-          footnote="Renamed from “Outstanding Receivables” (§4.2). Invoiced-and-unpaid only."
+          footnote="Renamed from “Outstanding Receivables”. Invoiced-and-unpaid only."
         />
         <StatTile
           label="Live overage (uninvoiced)"
@@ -723,7 +717,6 @@ export const BillingView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <Card>
         <SectionHeading
           title="Billing Management"
-          requirement="§4.4"
           subtitle="Subscriptions by billing channel — who invoices the customer and who collects the cash."
           icon={<Building2 className="w-5 h-5 text-accent" />}
           actions={<GranularityToggle value={ctx.granularity} onChange={ctx.onGranularityChange} />}
@@ -771,7 +764,7 @@ export const BillingView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
         {!channels.some((c) => c.key === 'gcp_marketplace') && (
           <p className="text-[11px] text-muted mt-3">
             No GCP Marketplace subscriptions in this window. The Enterprise contract with Google is billed outside
-            Stripe, so it does not appear as a channel row here (§3).
+            Stripe, so it does not appear as a channel row here.
           </p>
         )}
       </Card>
@@ -780,7 +773,6 @@ export const BillingView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
         <Card>
           <SectionHeading
             title="Unpaid renewals & overages"
-            requirement="§4.2"
             subtitle="Issued invoices still unpaid. Live in-cycle overage is deliberately excluded."
             icon={<Receipt className="w-5 h-5 text-caution" />}
           />
@@ -826,7 +818,6 @@ export const BillingView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
         <Card>
           <SectionHeading
             title="Subscription growth"
-            requirement="§4.5"
             subtitle="New activations — flagged as already working well, kept as-is and given the granularity toggle."
             icon={<TrendingUp className="w-5 h-5 text-positive" />}
           />

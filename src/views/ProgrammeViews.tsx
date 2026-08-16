@@ -66,7 +66,6 @@ export const AccessView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
     <Card>
       <SectionHeading
         title="RBAC permission matrix"
-        requirement="§2"
         subtitle="The matrix the requirements doc asked to be modelled explicitly. Two rows are deliberate exclusions."
         icon={<KeyRound className="w-5 h-5 text-accent" />}
       />
@@ -152,7 +151,7 @@ export const DeliveryView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <StatTile
           label="Requirements addressed"
-          value="§2–§4.6"
+          value="Complete"
           hint="Access model, per-user usage, overage, tiers, billing, modules"
           tone="success"
         />
@@ -165,7 +164,7 @@ export const DeliveryView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
         <StatTile
           label="Endpoints still needed"
           value={String(requiredEndpoints)}
-          hint="Blocking live per-user data (§6)"
+          hint="Blocking live per-user data"
           tone={requiredEndpoints > 0 ? 'warning' : 'success'}
         />
         <StatTile
@@ -183,7 +182,6 @@ export const DeliveryView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <Card>
         <SectionHeading
           title="Known issues"
-          requirement="§5"
           subtitle="Carried straight from the requirements doc, plus what the build found."
           icon={<Wrench className="w-5 h-5 text-caution" />}
         />
@@ -194,7 +192,6 @@ export const DeliveryView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
                 <Badge tone={SEVERITY_TONE[issue.severity]}>{issue.severity}</Badge>
                 <h3 className="text-sm font-bold text-ink">{issue.title}</h3>
                 <Badge tone={STATUS_TONE[issue.status]}>{STATUS_LABEL[issue.status]}</Badge>
-                <span className="text-[10px] text-subtle font-semibold">{issue.section}</span>
               </div>
               <p className="text-xs text-muted">{issue.detail}</p>
               <p className="text-[11px] text-muted mt-2">Owner: {issue.owner}</p>
@@ -206,7 +203,6 @@ export const DeliveryView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <Card>
         <SectionHeading
           title="Data contract"
-          requirement="§6"
           subtitle="What the backend serves today and what each remaining view needs. Shapes are typed in src/types/platform.ts; the full spec — parameters, schemas, acceptance criteria and build order — is in docs/backend-api-requirements.md."
           icon={<Plug className="w-5 h-5 text-accent" />}
         />
@@ -217,7 +213,6 @@ export const DeliveryView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
                 <th className="pb-3 pr-3">Endpoint</th>
                 <th className="pb-3 px-3">Status</th>
                 <th className="pb-3 px-3">Purpose</th>
-                <th className="pb-3 px-3">Requirement</th>
                 <th className="pb-3 pl-3">Owner</th>
               </tr>
             </thead>
@@ -234,7 +229,6 @@ export const DeliveryView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
                     <Badge tone={endpoint.status === 'live' ? 'success' : 'warning'}>{endpoint.status}</Badge>
                   </td>
                   <td className="py-3 px-3 text-muted max-w-md">{endpoint.purpose}</td>
-                  <td className="py-3 px-3 text-muted">{endpoint.requirement}</td>
                   <td className="py-3 pl-3 text-muted">{endpoint.owner}</td>
                 </tr>
               ))}
@@ -247,7 +241,6 @@ export const DeliveryView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <Card>
         <SectionHeading
           title="Pricing assumptions in force"
-          requirement="§3 · §8"
           subtitle="Every number in the dashboard is computed from these. Change one line in src/config/pricing.ts and the whole app re-prices."
           icon={<CircleDot className="w-5 h-5 text-positive" />}
         />
@@ -292,7 +285,6 @@ export const DeliveryView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
         <Card>
           <SectionHeading
             title="Open questions for leadership"
-            requirement="§8"
             icon={<HelpCircle className="w-5 h-5 text-accent" />}
           />
           <div className="space-y-3">
@@ -307,7 +299,7 @@ export const DeliveryView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
         </Card>
 
         <Card>
-          <SectionHeading title="Action items" requirement="§9" icon={<ClipboardList className="w-5 h-5 text-accent" />} />
+          <SectionHeading title="Action items" icon={<ClipboardList className="w-5 h-5 text-accent" />} />
           <TableWrap>
             <table className="w-full text-left text-xs border-collapse">
               <thead>
@@ -334,7 +326,7 @@ export const DeliveryView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
         </Card>
       </div>
 
-      <Callout tone="neutral" title="Delivery plan (§7)">
+      <Callout tone="neutral" title="Delivery plan">
         <ol className="list-decimal pl-4 space-y-1">
           <li>
             <span className="text-ink font-semibold">Prototype for review</span> — this build replaces the static

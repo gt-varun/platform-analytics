@@ -22,10 +22,9 @@ export const SectionHeading: React.FC<{
   title: string;
   subtitle?: string;
   icon?: React.ReactNode;
-  requirement?: string;
   actions?: React.ReactNode;
   id?: string;
-}> = ({ title, subtitle, icon, requirement, actions, id }) => (
+}> = ({ title, subtitle, icon, actions, id }) => (
   /*
    * The actions must not shrink — a segmented control squeezed narrower than its
    * labels is unusable — but they must not crush the heading either. Wrapping the
@@ -38,11 +37,6 @@ export const SectionHeading: React.FC<{
       <h2 id={id} className="text-[15px] font-semibold text-ink flex items-center gap-2 leading-6">
         {icon && <span className="text-accent shrink-0">{icon}</span>}
         <span>{title}</span>
-        {requirement && (
-          <span className="num text-[10px] font-medium text-subtle border border-line rounded px-1.5 py-px">
-            {requirement}
-          </span>
-        )}
       </h2>
       {subtitle && <p className="text-[13px] text-muted mt-1 max-w-[80ch] leading-relaxed">{subtitle}</p>}
     </div>

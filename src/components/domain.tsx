@@ -77,7 +77,7 @@ export const UnverifiedBadge: React.FC<{ label?: string }> = ({ label = 'unverif
   <Badge
     tone="warning"
     icon={<AlertTriangle className="w-3 h-3" />}
-    title="KYC overage tracking is blocked by a backend/KYC-initiation dependency (§5.1). This number under-reports."
+    title="KYC overage tracking is blocked by a backend/KYC-initiation dependency. This number under-reports."
   >
     {label}
   </Badge>

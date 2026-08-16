@@ -116,7 +116,7 @@ export const OverviewView: React.FC<{ ctx: ViewContext; refs: OverviewRefs }> = 
           hint={`${ctx.rollup.usersWithOverage} accounts accruing now`}
           tone={ctx.rollup.totalOverageUsd > 0 ? 'danger' : 'success'}
           icon={<Gauge className="w-4 h-4" />}
-          footnote="Uninvoiced — separate from receivables (§4.2)"
+          footnote="Uninvoiced — separate from receivables"
         />
         <StatTile
           label="Unpaid renewals & overages"
@@ -175,7 +175,6 @@ export const OverviewView: React.FC<{ ctx: ViewContext; refs: OverviewRefs }> = 
       <Card>
         <SectionHeading
           title="Usage trend"
-          requirement="§4.1 · §4.6"
           subtitle="Per module, each on its own scale — meeting seconds and proposal counts can't share an axis. Dashed line is the org allowance for the bucket."
           icon={<BarChart3 className="w-5 h-5 text-accent" />}
           actions={<GranularityToggle value={ctx.granularity} onChange={ctx.onGranularityChange} />}
@@ -195,7 +194,6 @@ export const OverviewView: React.FC<{ ctx: ViewContext; refs: OverviewRefs }> = 
           <div ref={refs.tierBreakdown}>
             <SectionHeading
               title="Tier mix"
-              requirement="§4.3"
               subtitle="Active subscriptions by plan tier, with Enterprise as a first-class tier."
               icon={<PieIcon className="w-5 h-5 text-accent" />}
             />
@@ -211,7 +209,6 @@ export const OverviewView: React.FC<{ ctx: ViewContext; refs: OverviewRefs }> = 
           <div ref={refs.providerBreakdown}>
             <SectionHeading
               title="Billing channels"
-              requirement="§4.4"
               subtitle="Subscriptions per billing channel — who invoices and who collects. Not a count of payment providers."
               icon={<Activity className="w-5 h-5 text-accent" />}
             />
@@ -228,7 +225,6 @@ export const OverviewView: React.FC<{ ctx: ViewContext; refs: OverviewRefs }> = 
         <div ref={refs.growth}>
           <SectionHeading
             title={`Subscription growth — ${data.growth?.total ?? 0} new activations`}
-            requirement="§4.5"
             subtitle="Kept as-is; the metric was flagged as already working well."
             icon={<Users className="w-5 h-5 text-positive" />}
             actions={<GranularityToggle value={ctx.granularity} onChange={ctx.onGranularityChange} />}
@@ -247,9 +243,9 @@ export const OverviewView: React.FC<{ ctx: ViewContext; refs: OverviewRefs }> = 
         <p className="text-[11px] text-muted mt-2 px-1">
           This list uses the <em>backend&apos;s own</em> limit configuration and currently returns{' '}
           {data.near_limit_users.length} account{data.near_limit_users.length === 1 ? '' : 's'}. The allowance model in
-          this dashboard (§3) is applied client-side and independently counts {ctx.rollup.usersWithOverage} account
+          this dashboard is applied client-side and independently counts {ctx.rollup.usersWithOverage} account
           {ctx.rollup.usersWithOverage === 1 ? '' : 's'} already over an allowance — the two disagree because the
-          backend limits have not been set to the §3 package values. Worth reconciling before either number is quoted.
+          backend limits have not been set to the packaged allowance values. Worth reconciling before either number is quoted.
         </p>
       </div>
 
@@ -279,7 +275,6 @@ export const ModulesView: React.FC<{ ctx: ViewContext }> = ({ ctx }) => {
       <Card padded={false} className="px-5 py-4">
         <SectionHeading
           title="Module usage vs package allowance"
-          requirement="§4.6"
           subtitle="Every module against the allowance included in the base packages, with the overage trigger drawn in."
           icon={<Gauge className="w-5 h-5 text-accent" />}
           actions={<GranularityToggle value={ctx.granularity} onChange={ctx.onGranularityChange} />}
