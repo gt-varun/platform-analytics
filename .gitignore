@@ -39,3 +39,5 @@ Thumbs.db
 
 # PDF report outputs & temporary files
 *.pdf
+.vercel
+.env*

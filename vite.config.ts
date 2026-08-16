@@ -15,4 +15,16 @@ export default defineConfig({
     port: 3001,
     strictPort: true,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Recharts is the single largest dependency and changes far less often
+        // than the dashboard code, so splitting it lets it stay cached across
+        // deploys instead of being re-downloaded with every app edit.
+        manualChunks: {
+          charts: ['recharts'],
+        },
+      },
+    },
+  },
 });

@@ -35,30 +35,30 @@ export async function generateExecutivePdfReport(
   // Helper for adding consistent header/footer across pages (except cover)
   const addHeaderFooter = (pageNum: number, totalPages: number) => {
     // Header
-    doc.setFillColor(15, 23, 42); // slate-900
+    doc.setFillColor(255, 255, 255); // slate-900
     doc.rect(0, 0, pageWidth, 12, 'F');
     doc.setFont('Helvetica', 'bold');
     doc.setFontSize(8);
-    doc.setTextColor(148, 163, 184); // slate-400
-    doc.text('PLATFORM CONSOLE  |  EXECUTIVE BUSINESS REPORT', margin, 8);
+    doc.setTextColor(107, 124, 142); // slate-400
+    doc.text('ANALYTICS CONSOLE   |   USAGE & BILLING REPORT', margin, 8);
     doc.setFont('Helvetica', 'normal');
     doc.text(`Period: ${data.period_days} Days`, pageWidth - margin, 8, { align: 'right' });
 
     // Footer Line
-    doc.setDrawColor(51, 65, 85); // slate-700
+    doc.setDrawColor(226, 232, 238); // slate-700
     doc.setLineWidth(0.3);
     doc.line(margin, pageHeight - 12, pageWidth - margin, pageHeight - 12);
 
     // Footer Text
     doc.setFontSize(8);
-    doc.setTextColor(148, 163, 184);
+    doc.setTextColor(107, 124, 142);
     doc.text('Internal Use Only — Strictly Confidential', margin, pageHeight - 6);
     doc.text(`Generated: ${generatedDateStr}`, pageWidth / 2, pageHeight - 6, { align: 'center' });
     doc.text(`Page ${pageNum} of ${totalPages}`, pageWidth - margin, pageHeight - 6, { align: 'right' });
   };
 
   // Helper: Draw Dark Card Background
-  const drawCard = (x: number, y: number, w: number, h: number, bgHex = '#1e293b', borderHex = '#334155') => {
+  const drawCard = (x: number, y: number, w: number, h: number, bgHex = '#ffffff', borderHex = '#e2e8ee') => {
     const rgbBg = hexToRgb(bgHex);
     const rgbBorder = hexToRgb(borderHex);
     doc.setFillColor(rgbBg.r, rgbBg.g, rgbBg.b);
@@ -71,41 +71,41 @@ export async function generateExecutivePdfReport(
   // PAGE 1: COVER PAGE
   // ==========================================
   // Background
-  doc.setFillColor(15, 23, 42); // Slate 900 background
+  doc.setFillColor(255, 255, 255); // Slate 900 background
   doc.rect(0, 0, pageWidth, pageHeight, 'F');
 
   // Decorative Accent bar
-  doc.setFillColor(99, 102, 241); // Indigo 500 accent
+  doc.setFillColor(31, 80, 144); // Indigo 500 accent
   doc.rect(margin, 35, 6, 45, 'F');
 
   // Document Title
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(26);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(14, 33, 56);
   doc.text('Business Analytics', margin + 12, 47);
   doc.text('Executive Report', margin + 12, 59);
 
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(12);
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text('Platform Usage, Revenue Health & Customer Growth Summary', margin + 12, 70);
 
   // Report Metadata Card
-  drawCard(margin, 90, contentWidth, 42, '#0f172a', '#334155');
+  drawCard(margin, 90, contentWidth, 42, '#f7f9fb', '#e2e8ee');
 
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(9);
-  doc.setTextColor(129, 140, 248); // Indigo 400
+  doc.setTextColor(31, 80, 144); // Indigo 400
   doc.text('REPORT DETAILS', margin + 8, 100);
 
   doc.setFontSize(10);
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text('Company / Product:', margin + 8, 110);
   doc.text('Selected Window:', margin + 8, 118);
   doc.text('Report Date:', margin + 8, 126);
 
   doc.setFont('Helvetica', 'bold');
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(14, 33, 56);
   doc.text('Platform Console', margin + 50, 110);
   doc.text(`${data.period_days} Days (${formatDate(data.period_start)} – ${formatDate(data.period_end)})`, margin + 50, 118);
   doc.text(generatedDateStr, margin + 50, 126);
@@ -113,66 +113,66 @@ export async function generateExecutivePdfReport(
   // Executive Summary Highlights
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(14);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(14, 33, 56);
   doc.text('Executive Key Highlights', margin, 150);
 
   const kpiBoxWidth = (contentWidth - 9) / 4;
   const kpiY = 158;
 
   // Box 1: MRR
-  drawCard(margin, kpiY, kpiBoxWidth, 32, '#1e293b', '#312e81');
+  drawCard(margin, kpiY, kpiBoxWidth, 32, '#ffffff', '#c2d5eb');
   doc.setFontSize(8);
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text('MRR', margin + 4, kpiY + 8);
   doc.setFontSize(13);
   doc.setFont('Helvetica', 'bold');
-  doc.setTextColor(129, 140, 248);
+  doc.setTextColor(31, 80, 144);
   doc.text(formatCurrency(data.revenue.mrr_usd), margin + 4, kpiY + 20);
 
   // Box 2: ARR
-  drawCard(margin + kpiBoxWidth + 3, kpiY, kpiBoxWidth, 32, '#1e293b', '#064e3b');
+  drawCard(margin + kpiBoxWidth + 3, kpiY, kpiBoxWidth, 32, '#ffffff', '#bfe0cd');
   doc.setFontSize(8);
   doc.setFont('Helvetica', 'normal');
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text('ARR', margin + kpiBoxWidth + 7, kpiY + 8);
   doc.setFontSize(13);
   doc.setFont('Helvetica', 'bold');
-  doc.setTextColor(52, 211, 153);
+  doc.setTextColor(14, 124, 74);
   doc.text(formatCurrency(data.revenue.arr_usd), margin + kpiBoxWidth + 7, kpiY + 20);
 
   // Box 3: AR
-  drawCard(margin + (kpiBoxWidth + 3) * 2, kpiY, kpiBoxWidth, 32, '#1e293b', '#78350f');
+  drawCard(margin + (kpiBoxWidth + 3) * 2, kpiY, kpiBoxWidth, 32, '#ffffff', '#eed9b6');
   doc.setFontSize(8);
   doc.setFont('Helvetica', 'normal');
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text('OUTSTANDING AR', margin + (kpiBoxWidth + 3) * 2 + 4, kpiY + 8);
   doc.setFontSize(13);
   doc.setFont('Helvetica', 'bold');
-  doc.setTextColor(251, 191, 36);
+  doc.setTextColor(166, 90, 8);
   doc.text(formatCurrency(data.accounts_receivable.total_outstanding_usd), margin + (kpiBoxWidth + 3) * 2 + 4, kpiY + 20);
 
   // Box 4: Churn
-  drawCard(margin + (kpiBoxWidth + 3) * 3, kpiY, kpiBoxWidth, 32, '#1e293b', '#881337');
+  drawCard(margin + (kpiBoxWidth + 3) * 3, kpiY, kpiBoxWidth, 32, '#ffffff', '#f0c4c0');
   doc.setFontSize(8);
   doc.setFont('Helvetica', 'normal');
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text('CHURN RATE', margin + (kpiBoxWidth + 3) * 3 + 4, kpiY + 8);
   doc.setFontSize(13);
   doc.setFont('Helvetica', 'bold');
-  doc.setTextColor(251, 113, 133);
+  doc.setTextColor(179, 38, 30);
   doc.text(formatPercent(data.churn.churn_rate), margin + (kpiBoxWidth + 3) * 3 + 4, kpiY + 20);
 
   // Cover Footer
   doc.setFontSize(8);
   doc.setFont('Helvetica', 'normal');
-  doc.setTextColor(100, 116, 139);
+  doc.setTextColor(147, 162, 178);
   doc.text('Internal Use Only — Strictly Confidential', pageWidth / 2, pageHeight - 15, { align: 'center' });
 
   // ==========================================
   // PAGE 2: EXECUTIVE KPIS & PRODUCT USAGE OVERVIEW
   // ==========================================
   doc.addPage();
-  doc.setFillColor(15, 23, 42);
+  doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, pageWidth, pageHeight, 'F');
   addHeaderFooter(2, 4);
 
@@ -181,7 +181,7 @@ export async function generateExecutivePdfReport(
   // Section 1: Executive KPIs Detail
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(14);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(14, 33, 56);
   doc.text('1. Executive Financial Metrics', margin, currentY);
   currentY += 6;
 
@@ -191,22 +191,22 @@ export async function generateExecutivePdfReport(
   // MRR Card
   drawCard(margin, currentY, cardW, cardH);
   doc.setFontSize(9);
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text('Monthly Recurring Revenue (MRR)', margin + 6, currentY + 8);
   doc.setFontSize(14);
   doc.setFont('Helvetica', 'bold');
-  doc.setTextColor(129, 140, 248);
+  doc.setTextColor(31, 80, 144);
   doc.text(formatCurrency(data.revenue.mrr_usd), margin + 6, currentY + 18);
 
   // ARR Card
   drawCard(margin + cardW + 9, currentY, cardW, cardH);
   doc.setFontSize(9);
   doc.setFont('Helvetica', 'normal');
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text('Annual Recurring Revenue (ARR)', margin + cardW + 15, currentY + 8);
   doc.setFontSize(14);
   doc.setFont('Helvetica', 'bold');
-  doc.setTextColor(52, 211, 153);
+  doc.setTextColor(14, 124, 74);
   doc.text(formatCurrency(data.revenue.arr_usd), margin + cardW + 15, currentY + 18);
 
   currentY += cardH + 6;
@@ -215,29 +215,30 @@ export async function generateExecutivePdfReport(
   drawCard(margin, currentY, cardW, cardH);
   doc.setFontSize(9);
   doc.setFont('Helvetica', 'normal');
-  doc.setTextColor(148, 163, 184);
-  doc.text('Outstanding Receivables', margin + 6, currentY + 8);
+  doc.setTextColor(107, 124, 142);
+  // §4.2 — invoiced-and-unpaid only; live in-cycle overage is deliberately not in this figure.
+  doc.text('Unpaid Renewals & Overages', margin + 6, currentY + 8);
   doc.setFontSize(14);
   doc.setFont('Helvetica', 'bold');
-  doc.setTextColor(251, 191, 36);
+  doc.setTextColor(166, 90, 8);
   doc.text(formatCurrency(data.accounts_receivable.total_outstanding_usd), margin + 6, currentY + 18);
   doc.setFontSize(8);
   doc.setFont('Helvetica', 'normal');
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text(`${data.accounts_receivable.open_invoice_count} open invoices (${data.accounts_receivable.overdue_invoice_count} overdue)`, margin + 6, currentY + 24);
 
   // Churn Card
   drawCard(margin + cardW + 9, currentY, cardW, cardH);
   doc.setFontSize(9);
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text('Churn Rate (Period)', margin + cardW + 15, currentY + 8);
   doc.setFontSize(14);
   doc.setFont('Helvetica', 'bold');
-  doc.setTextColor(251, 113, 133);
+  doc.setTextColor(179, 38, 30);
   doc.text(formatPercent(data.churn.churn_rate), margin + cardW + 15, currentY + 18);
   doc.setFontSize(8);
   doc.setFont('Helvetica', 'normal');
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text(`${data.churn.canceled_in_period} canceled / ${data.churn.active_now} active accounts`, margin + cardW + 15, currentY + 24);
 
   currentY += cardH + 14;
@@ -245,11 +246,11 @@ export async function generateExecutivePdfReport(
   // Section 2: Product Usage Overview
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(14);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(14, 33, 56);
   doc.text('2. Product Usage Overview', margin, currentY);
   doc.setFontSize(9);
   doc.setFont('Helvetica', 'normal');
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text(`Aggregated usage across all 4 feature modules in the trailing ${data.period_days}-day window`, margin, currentY + 5);
 
   currentY += 10;
@@ -262,14 +263,14 @@ export async function generateExecutivePdfReport(
   drawCard(margin, currentY, featCardW, featCardH);
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(11);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(14, 33, 56);
   doc.text('Meeting Time', margin + 6, currentY + 10);
   doc.setFontSize(16);
-  doc.setTextColor(129, 140, 248);
+  doc.setTextColor(31, 80, 144);
   doc.text(formatMeetingTime(mt.total_units), margin + 6, currentY + 22);
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(8);
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text(`Active Users: ${mt.active_users}  |  Avg / User: ${formatMeetingTime(mt.avg_per_active_user)}`, margin + 6, currentY + 32);
 
   // 2. KYC Checks
@@ -277,14 +278,14 @@ export async function generateExecutivePdfReport(
   drawCard(margin + featCardW + 9, currentY, featCardW, featCardH);
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(11);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(14, 33, 56);
   doc.text('KYC Checks', margin + featCardW + 15, currentY + 10);
   doc.setFontSize(16);
-  doc.setTextColor(52, 211, 153);
+  doc.setTextColor(14, 124, 74);
   doc.text(kyc.total_units.toLocaleString(), margin + featCardW + 15, currentY + 22);
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(8);
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text(`Active Users: ${kyc.active_users}  |  Avg / User: ${kyc.avg_per_active_user.toFixed(1)}`, margin + featCardW + 15, currentY + 32);
 
   currentY += featCardH + 6;
@@ -294,14 +295,14 @@ export async function generateExecutivePdfReport(
   drawCard(margin, currentY, featCardW, featCardH);
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(11);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(14, 33, 56);
   doc.text('Simulator', margin + 6, currentY + 10);
   doc.setFontSize(16);
-  doc.setTextColor(251, 191, 36);
+  doc.setTextColor(166, 90, 8);
   doc.text(sim.total_units.toLocaleString(), margin + 6, currentY + 22);
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(8);
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text(`Active Users: ${sim.active_users}  |  Avg / User: ${sim.avg_per_active_user.toFixed(1)}`, margin + 6, currentY + 32);
 
   // 4. Proposal
@@ -309,14 +310,14 @@ export async function generateExecutivePdfReport(
   drawCard(margin + featCardW + 9, currentY, featCardW, featCardH);
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(11);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(14, 33, 56);
   doc.text('Proposal', margin + featCardW + 15, currentY + 10);
   doc.setFontSize(16);
-  doc.setTextColor(244, 114, 182);
+  doc.setTextColor(169, 59, 123);
   doc.text(prop.total_units.toLocaleString(), margin + featCardW + 15, currentY + 22);
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(8);
-  doc.setTextColor(148, 163, 184);
+  doc.setTextColor(107, 124, 142);
   doc.text(`Active Users: ${prop.active_users}  |  Avg / User: ${prop.avg_per_active_user.toFixed(1)}`, margin + featCardW + 15, currentY + 32);
 
   // ==========================================
@@ -326,7 +327,7 @@ export async function generateExecutivePdfReport(
   await new Promise((r) => setTimeout(r, 200));
 
   doc.addPage();
-  doc.setFillColor(15, 23, 42);
+  doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, pageWidth, pageHeight, 'F');
   addHeaderFooter(3, 4);
 
@@ -334,7 +335,7 @@ export async function generateExecutivePdfReport(
 
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(14);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(14, 33, 56);
   doc.text('3. Analytics & Visual Distribution', margin, currentY);
   currentY += 8;
 
@@ -342,7 +343,7 @@ export async function generateExecutivePdfReport(
   const captureChartToImage = async (element: HTMLElement): Promise<{ dataUrl: string; width: number; height: number }> => {
     const dataUrl = await toPng(element, {
       pixelRatio: 2,
-      backgroundColor: '#0f172a',
+      backgroundColor: '#f7f9fb',
       cacheBust: true,
     });
     return new Promise((resolve, reject) => {
@@ -396,7 +397,7 @@ export async function generateExecutivePdfReport(
   await new Promise((r) => setTimeout(r, 200));
 
   doc.addPage();
-  doc.setFillColor(15, 23, 42);
+  doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, pageWidth, pageHeight, 'F');
   addHeaderFooter(4, 4);
 
@@ -404,24 +405,24 @@ export async function generateExecutivePdfReport(
 
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(14);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(14, 33, 56);
   doc.text('4. Revenue Health & Executive Insights', margin, currentY);
   currentY += 8;
 
   // Accounts Receivable Table Block
   doc.setFontSize(11);
-  doc.setTextColor(255, 255, 255);
-  doc.text('Accounts Receivable (Open Invoices)', margin, currentY);
+  doc.setTextColor(14, 33, 56);
+  doc.text('Unpaid Renewals & Overages (Open Invoices)', margin, currentY);
   currentY += 5;
 
   const ar = data.accounts_receivable;
   const invoices = ar.top_open_invoices || [];
 
   // AR Table Header
-  drawCard(margin, currentY, contentWidth, 8, '#334155', '#475569');
+  drawCard(margin, currentY, contentWidth, 8, '#e2e8ee', '#475569');
   doc.setFontSize(8);
   doc.setFont('Helvetica', 'bold');
-  doc.setTextColor(226, 232, 240);
+  doc.setTextColor(68, 87, 105);
   doc.text('Invoice ID', margin + 4, currentY + 5.5);
   doc.text('Customer ID', margin + 45, currentY + 5.5);
   doc.text('Amount (USD)', margin + 95, currentY + 5.5);
@@ -431,20 +432,20 @@ export async function generateExecutivePdfReport(
   currentY += 8;
 
   if (invoices.length === 0) {
-    drawCard(margin, currentY, contentWidth, 10, '#1e293b', '#334155');
+    drawCard(margin, currentY, contentWidth, 10, '#ffffff', '#e2e8ee');
     doc.setFont('Helvetica', 'normal');
     doc.setFontSize(8);
-    doc.setTextColor(148, 163, 184);
+    doc.setTextColor(107, 124, 142);
     doc.text('No outstanding invoices for this period.', margin + 4, currentY + 6.5);
     currentY += 10;
   } else {
     invoices.forEach((inv, idx) => {
-      const rowBg = idx % 2 === 0 ? '#1e293b' : '#0f172a';
-      drawCard(margin, currentY, contentWidth, 8, rowBg, '#334155');
+      const rowBg = idx % 2 === 0 ? '#ffffff' : '#f7f9fb';
+      drawCard(margin, currentY, contentWidth, 8, rowBg, '#e2e8ee');
 
       doc.setFont('Helvetica', 'normal');
       doc.setFontSize(8);
-      doc.setTextColor(255, 255, 255);
+      doc.setTextColor(14, 33, 56);
       doc.text(inv.invoice_id, margin + 4, currentY + 5.5);
       doc.text(inv.customer_id, margin + 45, currentY + 5.5);
       doc.text(formatCurrency(inv.amount_remaining_usd), margin + 95, currentY + 5.5);
@@ -452,11 +453,11 @@ export async function generateExecutivePdfReport(
 
       if (inv.overdue) {
         doc.setFont('Helvetica', 'bold');
-        doc.setTextColor(251, 113, 133);
+        doc.setTextColor(179, 38, 30);
         doc.text('OVERDUE', margin + 165, currentY + 5.5);
       } else {
         doc.setFont('Helvetica', 'normal');
-        doc.setTextColor(52, 211, 153);
+        doc.setTextColor(14, 124, 74);
         doc.text('OPEN', margin + 165, currentY + 5.5);
       }
 
@@ -469,17 +470,17 @@ export async function generateExecutivePdfReport(
   // Near Limit Users Table
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(11);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(14, 33, 56);
   doc.text('Near-Limit Users (>80% Usage)', margin, currentY);
   currentY += 5;
 
   const nearUsers = data.near_limit_users || [];
 
   // Header
-  drawCard(margin, currentY, contentWidth, 8, '#334155', '#475569');
+  drawCard(margin, currentY, contentWidth, 8, '#e2e8ee', '#475569');
   doc.setFontSize(8);
   doc.setFont('Helvetica', 'bold');
-  doc.setTextColor(226, 232, 240);
+  doc.setTextColor(68, 87, 105);
   doc.text('User ID', margin + 4, currentY + 5.5);
   doc.text('Tier', margin + 45, currentY + 5.5);
   doc.text('Feature', margin + 75, currentY + 5.5);
@@ -489,20 +490,20 @@ export async function generateExecutivePdfReport(
   currentY += 8;
 
   if (nearUsers.length === 0) {
-    drawCard(margin, currentY, contentWidth, 10, '#1e293b', '#334155');
+    drawCard(margin, currentY, contentWidth, 10, '#ffffff', '#e2e8ee');
     doc.setFont('Helvetica', 'normal');
     doc.setFontSize(8);
-    doc.setTextColor(148, 163, 184);
+    doc.setTextColor(107, 124, 142);
     doc.text('No near-limit users identified.', margin + 4, currentY + 6.5);
     currentY += 10;
   } else {
     nearUsers.forEach((u, idx) => {
-      const rowBg = idx % 2 === 0 ? '#1e293b' : '#0f172a';
-      drawCard(margin, currentY, contentWidth, 8, rowBg, '#334155');
+      const rowBg = idx % 2 === 0 ? '#ffffff' : '#f7f9fb';
+      drawCard(margin, currentY, contentWidth, 8, rowBg, '#e2e8ee');
 
       doc.setFont('Helvetica', 'normal');
       doc.setFontSize(8);
-      doc.setTextColor(255, 255, 255);
+      doc.setTextColor(14, 33, 56);
       doc.text(u.user_id, margin + 4, currentY + 5.5);
       doc.text(u.tier.toUpperCase(), margin + 45, currentY + 5.5);
       doc.text(u.feature, margin + 75, currentY + 5.5);
@@ -510,10 +511,10 @@ export async function generateExecutivePdfReport(
 
       if (u.percent_used >= 1.0) {
         doc.setFont('Helvetica', 'bold');
-        doc.setTextColor(251, 113, 133);
+        doc.setTextColor(179, 38, 30);
       } else {
         doc.setFont('Helvetica', 'bold');
-        doc.setTextColor(251, 191, 36);
+        doc.setTextColor(166, 90, 8);
       }
       doc.text(formatPercent(u.percent_used), margin + 165, currentY + 5.5);
 
@@ -526,24 +527,24 @@ export async function generateExecutivePdfReport(
   // Executive Insights List
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(11);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(14, 33, 56);
   doc.text('Automatically Generated Executive Insights', margin, currentY);
   currentY += 6;
 
   insights.forEach((ins) => {
     if (currentY + 16 > pageHeight - 18) return;
 
-    let borderCol = '#334155';
-    let titleCol = '#818cf8';
+    let borderCol = '#e2e8ee';
+    let titleCol = '#1f5090';
     if (ins.impact === 'attention') {
-      borderCol = '#92400e';
-      titleCol = '#fbbf24';
+      borderCol = '#eed9b6';
+      titleCol = '#a65a08';
     } else if (ins.impact === 'positive') {
-      borderCol = '#065f46';
-      titleCol = '#34d399';
+      borderCol = '#bfe0cd';
+      titleCol = '#0e7c4a';
     }
 
-    drawCard(margin, currentY, contentWidth, 14, '#1e293b', borderCol);
+    drawCard(margin, currentY, contentWidth, 14, '#ffffff', borderCol);
     doc.setFont('Helvetica', 'bold');
     doc.setFontSize(8.5);
     doc.setTextColor(hexToRgb(titleCol).r, hexToRgb(titleCol).g, hexToRgb(titleCol).b);
@@ -551,7 +552,7 @@ export async function generateExecutivePdfReport(
 
     doc.setFont('Helvetica', 'normal');
     doc.setFontSize(7.5);
-    doc.setTextColor(203, 213, 225);
+    doc.setTextColor(68, 87, 105);
     doc.text(ins.description, margin + 4, currentY + 10, { maxWidth: contentWidth - 8 });
 
     currentY += 16;

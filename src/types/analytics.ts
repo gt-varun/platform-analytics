@@ -33,8 +33,15 @@ export interface AccountsReceivable {
 }
 
 export interface Revenue {
+  /** Gross: tier list price × count. Blind to Stripe discounts — kept for backward compatibility. */
   mrr_usd: number;
   arr_usd: number;
+  /** Net of active Stripe coupons (e.g. the 100%-off migration coupon). The trustworthy number. */
+  real_mrr_usd?: number;
+  real_arr_usd?: number;
+  real_mrr_by_tier_usd?: Record<string, number>;
+  exempted_subscriber_count?: number;
+  paying_subscriber_count?: number;
   trialing_pipeline_mrr_usd: number;
   mrr_by_tier_usd: Record<string, number>;
   note?: string;
@@ -76,8 +83,13 @@ export interface UsageSummaryResponse {
   period_end: string;
   generated_at: string;
   features: Features;
+  /** Active subscriptions by tier. Enterprise contracts have no Stripe row and may be absent. */
   tier_breakdown: Record<string, number>;
+  /** Subscriptions per billing *channel* (Stripe direct vs GCP Marketplace) — not "56 providers" (§4.4). */
   billing_provider_breakdown: Record<string, number>;
+  /** Same splits, excluding 100%-off exempted accounts. */
+  paying_tier_breakdown?: Record<string, number>;
+  paying_billing_provider_breakdown?: Record<string, number>;
   accounts_receivable: AccountsReceivable;
   revenue: Revenue;
   churn: Churn;

@@ -14,6 +14,7 @@ import {
   Tooltip,
 } from 'recharts';
 import { formatCompactNumber, formatDate, formatMeetingTime } from '../utils/formatters';
+import { usePalette } from '../theme';
 
 // Custom Tooltip component for Recharts
 interface CustomTooltipProps {
@@ -27,16 +28,16 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label, i
   if (!active || !payload || payload.length === 0) return null;
 
   return (
-    <div className="bg-slate-900/95 border border-slate-700/80 p-3 rounded-xl shadow-2xl backdrop-blur-md text-xs">
-      {label && <p className="font-semibold text-slate-300 mb-2 border-b border-slate-800 pb-1">{formatDate(label)}</p>}
+    <div className="bg-surface border border-line p-3 rounded-xl shadow-lg backdrop-blur-md text-xs">
+      {label && <p className="font-semibold text-ink-2 mb-2 border-b border-line pb-1">{formatDate(label)}</p>}
       <div className="space-y-1">
         {payload.map((entry, index) => (
           <div key={index} className="flex items-center justify-between space-x-4">
             <div className="flex items-center space-x-2">
               <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color }} />
-              <span className="text-slate-400 capitalize">{entry.name.replace('_', ' ')}</span>
+              <span className="text-muted capitalize">{entry.name.replace('_', ' ')}</span>
             </div>
-            <span className="font-bold text-white">
+            <span className="font-bold text-ink">
               {entry.name === 'meeting_time' || (isTimeChart && entry.name === 'Meeting Time')
                 ? formatMeetingTime(entry.value)
                 : entry.value.toLocaleString()}
@@ -70,6 +71,7 @@ interface GrowthChartProps {
 export type ChartProps = UsageTrendChartProps | DonutChartProps | GrowthChartProps;
 
 export const AnalyticsChart: React.FC<ChartProps> = (props) => {
+  const chrome = usePalette().chart;
   // Toggle states for daily usage trend features
   const [activeSeries, setActiveSeries] = useState<Record<string, boolean>>({
     meeting_time: true,
@@ -84,25 +86,25 @@ export const AnalyticsChart: React.FC<ChartProps> = (props) => {
 
   if (props.type === 'usage-trend') {
     const seriesConfig = [
-      { key: 'meeting_time', name: 'Meeting Time', color: '#6366f1' }, // Indigo
-      { key: 'kyc_count', name: 'KYC Checks', color: '#10b981' },     // Emerald
-      { key: 'simulator', name: 'Simulator', color: '#f59e0b' },      // Amber
-      { key: 'proposal', name: 'Proposal', color: '#ec4899' },        // Pink
+      { key: 'meeting_time', name: 'Meeting Time', color: '#3454d1' }, // Indigo
+      { key: 'kyc_count', name: 'KYC Checks', color: '#178a5b' },     // Emerald
+      { key: 'simulator', name: 'Simulator', color: '#b25e09' },      // Amber
+      { key: 'proposal', name: 'Proposal', color: '#a93b7b' },        // Pink
     ];
 
     return (
       <div className="w-full">
         {/* Dataset Toggles */}
         <div className="flex flex-wrap items-center gap-2 mb-4">
-          <span className="text-xs text-slate-400 font-medium mr-1">Datasets:</span>
+          <span className="text-xs text-muted font-medium mr-1">Datasets:</span>
           {seriesConfig.map((s) => (
             <button
               key={s.key}
               onClick={() => toggleSeries(s.key)}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all flex items-center space-x-1.5 ${
                 activeSeries[s.key]
-                  ? 'bg-slate-800 text-white border-slate-600'
-                  : 'bg-slate-900/50 text-slate-400 border-slate-800 opacity-60'
+                  ? 'bg-sunken text-ink border-line-strong'
+                  : 'bg-sunken text-muted border-line opacity-60'
               }`}
             >
               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.color }} />
@@ -114,16 +116,16 @@ export const AnalyticsChart: React.FC<ChartProps> = (props) => {
         <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={props.data} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke={chrome.grid} vertical={false} />
               <XAxis
                 dataKey="day"
                 tickFormatter={(val) => formatDate(val).split(',')[0]}
-                stroke="#64748b"
-                tick={{ fill: '#94a3b8', fontSize: 11 }}
+                stroke={chrome.axisLine}
+                tick={{ fill: chrome.axisTick, fontSize: 11 }}
               />
               <YAxis
-                stroke="#64748b"
-                tick={{ fill: '#94a3b8', fontSize: 11 }}
+                stroke={chrome.axisLine}
+                tick={{ fill: chrome.axisTick, fontSize: 11 }}
                 tickFormatter={(val) => formatCompactNumber(val)}
               />
               <Tooltip content={<CustomTooltip />} />
@@ -131,6 +133,7 @@ export const AnalyticsChart: React.FC<ChartProps> = (props) => {
                 (s) =>
                   activeSeries[s.key] && (
                     <Line
+              isAnimationActive={false}
                       key={s.key}
                       type="monotone"
                       dataKey={s.key}
@@ -158,6 +161,7 @@ export const AnalyticsChart: React.FC<ChartProps> = (props) => {
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
+              isAnimationActive={false}
                 data={props.data}
                 cx="50%"
                 cy="50%"
@@ -167,7 +171,7 @@ export const AnalyticsChart: React.FC<ChartProps> = (props) => {
                 dataKey="value"
               >
                 {props.data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} stroke="#090d16" strokeWidth={2} />
+                  <Cell key={`cell-${index}`} fill={entry.color} stroke={chrome.donutStroke} strokeWidth={2} />
                 ))}
               </Pie>
               <Tooltip
@@ -175,14 +179,14 @@ export const AnalyticsChart: React.FC<ChartProps> = (props) => {
                   `${val} (${total > 0 ? ((val / total) * 100).toFixed(1) : 0}%)`,
                   'Count',
                 ]}
-                contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '0.75rem' }}
+                contentStyle={{ backgroundColor: chrome.tooltipBg, borderColor: chrome.tooltipBorder, borderRadius: '8px', fontSize: '12px' }}
               />
             </PieChart>
           </ResponsiveContainer>
           {/* Center Label */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-xl font-bold text-white">{total}</span>
-            <span className="text-[10px] text-slate-400 font-medium uppercase">{props.centerLabel || 'Total'}</span>
+            <span className="text-xl font-bold text-ink">{total}</span>
+            <span className="text-[10px] text-muted font-medium uppercase">{props.centerLabel || 'Total'}</span>
           </div>
         </div>
 
@@ -191,14 +195,14 @@ export const AnalyticsChart: React.FC<ChartProps> = (props) => {
           {props.data.map((item, idx) => {
             const pct = total > 0 ? ((item.value / total) * 100).toFixed(1) : 0;
             return (
-              <div key={idx} className="flex items-center justify-between p-2 rounded-xl bg-slate-900/60 border border-slate-800">
+              <div key={idx} className="flex items-center justify-between p-2 rounded-xl bg-sunken border border-line">
                 <div className="flex items-center space-x-2">
                   <span className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="font-medium text-slate-300 capitalize">{item.name}</span>
+                  <span className="font-medium text-ink-2 capitalize">{item.name}</span>
                 </div>
                 <div className="text-right">
-                  <span className="font-bold text-white mr-1.5">{item.value}</span>
-                  <span className="text-slate-400 text-[11px]">({pct}%)</span>
+                  <span className="font-bold text-ink mr-1.5">{item.value}</span>
+                  <span className="text-muted text-[11px]">({pct}%)</span>
                 </div>
               </div>
             );
@@ -215,24 +219,25 @@ export const AnalyticsChart: React.FC<ChartProps> = (props) => {
           <AreaChart data={props.data} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="growthGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
-                <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
+                <stop offset="5%" stopColor={chrome.growth} stopOpacity={0.4} />
+                <stop offset="95%" stopColor={chrome.growth} stopOpacity={0.0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke={chrome.grid} vertical={false} />
             <XAxis
               dataKey="day"
               tickFormatter={(val) => formatDate(val).split(',')[0]}
-              stroke="#64748b"
-              tick={{ fill: '#94a3b8', fontSize: 11 }}
+              stroke={chrome.axisLine}
+              tick={{ fill: chrome.axisTick, fontSize: 11 }}
             />
-            <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 11 }} allowDecimals={false} />
+            <YAxis stroke={chrome.axisLine} tick={{ fill: chrome.axisTick, fontSize: 11 }} allowDecimals={false} />
             <Tooltip content={<CustomTooltip />} />
             <Area
+              isAnimationActive={false}
               type="monotone"
               dataKey="count"
               name="New Subscriptions"
-              stroke="#10b981"
+              stroke={chrome.growth}
               strokeWidth={2.5}
               fillOpacity={1}
               fill="url(#growthGradient)"

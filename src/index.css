@@ -1,41 +1,346 @@
 @import "tailwindcss";
 
-@layer base {
-  body {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background-color: #090d16;
-    color: #f8fafc;
+/*
+ * Design system — "Ledger".
+ *
+ * The product meters consumption against an allowance and turns the excess into
+ * money, so the visual language is borrowed from financial statements: white
+ * paper, hairline rules, one navy accent, colour reserved for status, and every
+ * figure set in tabular mono so columns line up the way a statement's do.
+ */
+
+@theme {
+  /* Surfaces — neutrals carry a slight navy bias so they sit under the accent. */
+  --color-canvas: #f2f5f8;
+  --color-surface: #ffffff;
+  --color-sunken: #f7f9fb;
+  --color-line: #e2e8ee;
+  --color-line-strong: #c9d4de;
+
+  /* Ink */
+  --color-ink: #0e2138;
+  --color-ink-2: #445769;
+  --color-muted: #6b7c8e;
+  --color-subtle: #93a2b2;
+
+  /* Accent — a single navy, used for structure and the active state only. */
+  --color-accent: #1f5090;
+  --color-accent-hover: #17406f;
+  --color-accent-tint: #ebf1f8;
+  --color-accent-line: #c2d5eb;
+  --color-on-accent: #ffffff;
+
+  /*
+   * Modal scrim. Deliberately its own token rather than a tint of `ink`: ink
+   * flips to near-white in dark mode, so anything derived from it washes the
+   * page *out* instead of pushing it back. A scrim is dark in both themes.
+   */
+  --color-scrim: rgba(14, 33, 56, 0.42);
+
+  /* Status — reserved. Never used as a categorical series colour. */
+  --color-positive: #0e7c4a;
+  --color-positive-tint: #e8f4ee;
+  --color-caution: #a65a08;
+  --color-caution-tint: #fbf1e3;
+  --color-critical: #b3261e;
+  --color-critical-tint: #fbeae8;
+
+  /* Categorical series — validated on white for CVD separation and contrast. */
+  --color-series-meetings: #3454d1;
+  --color-series-kyc: #178a5b;
+  --color-series-simulator: #b25e09;
+  --color-series-proposals: #a93b7b;
+
+  --font-sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-card: 10px;
+}
+
+/*
+ * Dark is its own palette, not an inversion. The ground is a deep blue-charcoal
+ * so the navy accent still belongs to it; elevation is carried by lightness
+ * (canvas → surface gets lighter) rather than by shadow, which is how depth
+ * actually reads on a dark screen; ink is warmed off pure white to stop the
+ * halation you get from #fff on near-black.
+ *
+ * Structured for all three viewer states: bare :root is light, the media query
+ * covers "system" (no attribute stamped), and the attribute rule lets an
+ * explicit choice win in either direction.
+ */
+:root[data-theme='dark'] {
+  --color-canvas: #0b1017;
+  --color-surface: #121a25;
+  --color-sunken: #0e1620;
+  --color-line: #1e2a38;
+  --color-line-strong: #2c3a4b;
+
+  --color-ink: #e8eef5;
+  --color-ink-2: #b3c0ce;
+  --color-muted: #8494a5;
+  --color-subtle: #61707f;
+
+  --color-accent: #84a9ff;
+  --color-accent-hover: #a3bfff;
+  --color-accent-tint: #16243a;
+  --color-accent-line: #2a4570;
+  --color-on-accent: #0b1017;
+
+  /* Darker and more opaque than the light scrim: the ground underneath is
+     already dark, so a light-weight wash would not separate the drawer. */
+  --color-scrim: rgba(2, 6, 12, 0.66);
+
+  --color-positive: #4fbe87;
+  --color-positive-tint: #102520;
+  --color-caution: #e0a458;
+  --color-caution-tint: #2a2013;
+  --color-critical: #f08279;
+  --color-critical-tint: #2e1917;
+
+  --color-series-meetings: #84a9ff;
+  --color-series-kyc: #31a883;
+  --color-series-simulator: #f7c77e;
+  --color-series-proposals: #e58ab8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-canvas: #0b1017;
+    --color-surface: #121a25;
+    --color-sunken: #0e1620;
+    --color-line: #1e2a38;
+    --color-line-strong: #2c3a4b;
+
+    --color-ink: #e8eef5;
+    --color-ink-2: #b3c0ce;
+    --color-muted: #8494a5;
+    --color-subtle: #61707f;
+
+    --color-accent: #84a9ff;
+    --color-accent-hover: #a3bfff;
+    --color-accent-tint: #16243a;
+    --color-accent-line: #2a4570;
+    --color-on-accent: #0b1017;
+
+    /* Darker and more opaque than the light scrim: the ground underneath is
+       already dark, so a light-weight wash would not separate the drawer. */
+    --color-scrim: rgba(2, 6, 12, 0.66);
+
+    --color-positive: #4fbe87;
+    --color-positive-tint: #102520;
+    --color-caution: #e0a458;
+    --color-caution-tint: #2a2013;
+    --color-critical: #f08279;
+    --color-critical-tint: #2e1917;
+
+    --color-series-meetings: #84a9ff;
+    --color-series-kyc: #31a883;
+    --color-series-simulator: #f7c77e;
+    --color-series-proposals: #e58ab8;
   }
 }
 
-/* Custom scrollbar */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    color-scheme: light dark;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-feature-settings: "cv05" 1;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  h1, h2, h3 {
+    letter-spacing: -0.012em;
+    text-wrap: balance;
+  }
+
+  /* One visible focus treatment for every interactive element. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  /*
+   * Every figure in the product is set here: mono, tabular, slightly tightened.
+   * This is what makes a column of numbers read as a ledger rather than as text.
+   */
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+  }
+
+  .label {
+    font-size: 11px;
+    line-height: 1.4;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+}
+
+/* Scrollbars — thin, tinted to the ground they sit on. */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--color-line-strong);
   border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: var(--color-muted);
+  background-clip: content-box;
 }
 
-/* Shimmer Animation */
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, #0f172a 25%, #1e293b 37%, #0f172a 63%);
+  background: linear-gradient(
+    90deg,
+    var(--color-sunken) 25%,
+    var(--color-line) 37%,
+    var(--color-sunken) 63%
+  );
   background-size: 200% 100%;
-  animation: shimmer 1.8s infinite ease-in-out;
+  animation: shimmer 1.6s infinite ease-in-out;
+}
+
+/*
+ * Motion.
+ *
+ * The rule here is that movement only ever explains something: content arrives
+ * from where it belongs, meters grow to the figure they represent, the active
+ * nav marker travels rather than teleports. Nothing loops, nothing decorates,
+ * and every distance is small — a ledger that bounces stops reading as one.
+ */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/*
+ * Sections inside a view stagger in reading order. The delay is capped at six
+ * steps: past that the tail of a long page is still animating when the eye has
+ * already arrived, which reads as lag rather than as sequence.
+ */
+.stagger > * {
+  animation: rise 300ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 40ms; }
+.stagger > *:nth-child(3) { animation-delay: 80ms; }
+.stagger > *:nth-child(4) { animation-delay: 120ms; }
+.stagger > *:nth-child(5) { animation-delay: 160ms; }
+.stagger > *:nth-child(n + 6) { animation-delay: 200ms; }
+
+.animate-fade {
+  animation: fade 200ms ease-out both;
+}
+
+/*
+ * A menu grows from the corner it is anchored to, so the panel reads as coming
+ * out of its trigger rather than appearing over it. Scale starts near 1 — a
+ * bigger pop reads as decoration.
+ */
+@keyframes menu-in {
+  from { opacity: 0; transform: scale(0.97) translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.animate-menu {
+  animation: menu-in 140ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* The drawer slides in from the edge it is anchored to. */
+@keyframes drawer-in {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.animate-drawer {
+  animation: drawer-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* The toast enters from the edge it is pinned to. */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.animate-slide-up {
+  animation: slide-up 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/*
+ * Cards lift a hairline on hover only where the card is a target. Elevation is
+ * carried by the border darkening rather than by a drop shadow, which is what
+ * keeps the paper metaphor intact in light and stays visible in dark.
+ */
+.card-interactive {
+  transition: border-color 150ms ease, transform 150ms ease, background-color 150ms ease;
+}
+.card-interactive:hover {
+  border-color: var(--color-line-strong);
+  transform: translateY(-1px);
+}
+
+/* Meter fills grow to their value on mount and re-animate when the figure moves. */
+.meter-fill {
+  transition: width 500ms cubic-bezier(0.22, 0.61, 0.36, 1),
+              background-color 200ms ease;
+}
+
+/*
+ * The tables here are wide enough to scroll horizontally, where losing your row
+ * is the standard failure. A tint on hover keeps the row tracked across the
+ * scroll. Applied to every data table rather than opted into per call site, so
+ * no table can be built later that quietly lacks it.
+ */
+tbody tr {
+  transition: background-color 120ms ease;
+}
+tbody tr:hover {
+  background-color: var(--color-sunken);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

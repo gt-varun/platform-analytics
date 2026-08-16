@@ -6,56 +6,52 @@ interface ExecutiveBannerProps {
   summary: BannerSummary;
 }
 
+/**
+ * The status line at the top of the Overview. Kept quiet on purpose: a status
+ * rail on the left carries the state, the surface stays paper-white so it
+ * doesn't shout over the numbers below it.
+ */
 export const ExecutiveBanner: React.FC<ExecutiveBannerProps> = ({ summary }) => {
-  const getBannerStyles = () => {
-    switch (summary.status) {
-      case 'critical':
-        return {
-          bg: 'bg-red-950/40 border-red-500/30 text-red-200',
-          icon: <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />,
-          accent: 'text-red-400',
-        };
-      case 'warning':
-        return {
-          bg: 'bg-amber-950/40 border-amber-500/30 text-amber-200',
-          icon: <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />,
-          accent: 'text-amber-400',
-        };
-      case 'healthy':
-      default:
-        return {
-          bg: 'bg-emerald-950/30 border-emerald-500/30 text-emerald-200',
-          icon: <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />,
-          accent: 'text-emerald-400',
-        };
-    }
-  };
-
-  const styles = getBannerStyles();
+  const styles = {
+    critical: {
+      rail: 'border-l-critical',
+      icon: <AlertCircle className="w-[18px] h-[18px] text-critical shrink-0" />,
+      headline: 'text-critical',
+    },
+    warning: {
+      rail: 'border-l-caution',
+      icon: <AlertTriangle className="w-[18px] h-[18px] text-caution shrink-0" />,
+      headline: 'text-ink',
+    },
+    healthy: {
+      rail: 'border-l-positive',
+      icon: <ShieldCheck className="w-[18px] h-[18px] text-positive shrink-0" />,
+      headline: 'text-ink',
+    },
+  }[summary.status];
 
   return (
-    <div className={`w-full rounded-2xl border p-4 mb-8 shadow-lg backdrop-blur-sm ${styles.bg}`}>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center space-x-3">
+    <div className={`w-full bg-surface rounded-r-card border border-l-[3px] border-line ${styles.rail} px-5 py-4`}>
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
           {styles.icon}
           <div>
-            <span className="text-xs uppercase tracking-wider font-bold opacity-75 block">Executive Health Status</span>
-            <h2 className={`text-base font-semibold ${styles.accent}`}>{summary.headline}</h2>
+            <span className="label block">Platform status</span>
+            <h2 className={`text-[15px] font-semibold ${styles.headline}`}>{summary.headline}</h2>
           </div>
         </div>
 
-        {/* Dynamic Status Pills */}
         <div className="flex flex-wrap items-center gap-2">
           {summary.pills.map((pill, idx) => {
-            let pillStyle = 'bg-slate-800/80 text-slate-300 border-slate-700';
-            if (pill.type === 'success') pillStyle = 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20';
-            if (pill.type === 'warning') pillStyle = 'bg-amber-500/10 text-amber-300 border-amber-500/20';
-            if (pill.type === 'error') pillStyle = 'bg-red-500/10 text-red-300 border-red-500/20';
+            let pillStyle = 'bg-sunken text-ink-2 border-line';
+            if (pill.type === 'success') pillStyle = 'bg-positive-tint text-positive border-positive/25';
+            if (pill.type === 'warning') pillStyle = 'bg-caution-tint text-caution border-caution/25';
+            if (pill.type === 'error') pillStyle = 'bg-critical-tint text-critical border-critical/25';
 
             return (
               <span
                 key={idx}
-                className={`inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold border ${pillStyle}`}
+                className={`inline-flex items-center px-2.5 py-1 rounded-md text-[11.5px] font-semibold border ${pillStyle}`}
               >
                 {pill.label}
               </span>

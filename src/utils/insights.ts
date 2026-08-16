@@ -1,5 +1,5 @@
 import { UsageSummaryResponse, BannerHealthStatus, InsightItem } from '../types/analytics';
-import { formatCurrency, formatPercent, formatMeetingTime, formatFeatureName } from './formatters';
+import { formatCurrency, formatPercent, formatDuration, formatFeatureName } from './formatters';
 
 export interface BannerSummary {
   status: BannerHealthStatus;
@@ -84,7 +84,7 @@ export function generateInsights(data: UsageSummaryResponse): InsightItem[] {
     const topMetric = data.features[topFeatureKey as keyof typeof data.features];
     const unitText =
       topFeatureKey === 'meeting_time'
-        ? formatMeetingTime(topMetric.total_units)
+        ? formatDuration(topMetric.total_units)
         : `${topMetric.total_units.toLocaleString()} units`;
 
     insights.push({
@@ -96,10 +96,11 @@ export function generateInsights(data: UsageSummaryResponse): InsightItem[] {
     });
   }
 
-  // 2. Pro Tier MRR Share
-  const totalMrr = data.revenue.mrr_usd || 1;
-  const proMrr = data.revenue.mrr_by_tier_usd?.pro || 0;
-  const proPct = Math.round((proMrr / totalMrr) * 100);
+  // 2. Pro Tier MRR Share — net of coupons, so it agrees with the Net MRR tile.
+  const byTier = data.revenue.real_mrr_by_tier_usd ?? data.revenue.mrr_by_tier_usd ?? {};
+  const totalMrr = data.revenue.real_mrr_usd ?? data.revenue.mrr_usd ?? 0;
+  const proMrr = byTier.pro || 0;
+  const proPct = totalMrr > 0 ? Math.round((proMrr / totalMrr) * 100) : 0;
   insights.push({
     id: 'mrr-tier',
     category: 'Revenue',

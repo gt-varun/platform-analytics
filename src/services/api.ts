@@ -4,6 +4,16 @@ import { PeriodDays, UsageSummaryResponse } from '../types/analytics';
 const BASE_URL = 'https://stripe-backend-cowwwkwqaq-el.a.run.app';
 const DEFAULT_SECRET = '72537ce6094b43d88c6d6958b9a101a0f6de7a9bd848e07bfa71b503cf442fa8';
 
+/** Shared by every admin-scoped call (see services/platformData.ts). */
+export const API_BASE_URL = BASE_URL;
+
+export function adminHeaders(): Record<string, string> {
+  return {
+    'X-Internal-Secret': import.meta.env.VITE_ADMIN_SECRET || DEFAULT_SECRET,
+    Accept: 'application/json',
+  };
+}
+
 export interface ApiError {
   status?: number;
   message: string;
